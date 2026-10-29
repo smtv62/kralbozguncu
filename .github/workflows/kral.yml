@@ -1,0 +1,38 @@
+name: Kral M3U Guncelleyici
+
+on:
+  schedule:
+    - cron: '25 */2 * * *'   # her 2 saatte bir
+  workflow_dispatch:          # elle (manuel) tetikleme butonu
+
+permissions:
+  contents: write
+
+jobs:
+  update-playlist:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Repoyu cek
+      uses: actions/checkout@v4
+
+    - name: Python Kur
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Kutuphaneleri Yukle
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests urllib3
+
+    - name: Scripti calistir (kral.py)
+      run: python kral.py
+
+    - name: Dosyayi repoya isle (Commit & Push)
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add kral.m3u
+        git commit -m "Oto Guncelleme: $(date)" || exit 0
+        git push
