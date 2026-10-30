@@ -4,7 +4,9 @@ Akis:
   1) Ana sayfadan ``channels`` (TV kanallari) + ``karsilasmalar`` (maclar) okunur.
   2) Yayin adresi = calisan base url + id + ".m3u8" (site ayni mantigi kullanir).
   3) Her aday GET ile dogrulanir; calismayanlar listeye girmez.
-  4) Hic kanal yoksa DOSYA YAZILMAZ ve cikis 1 olur (eski liste korunur).
+  4) M3U'ya ``#EXTVLCOPT:http-referrer`` satiri yazilir (oyuncuya gore
+     referer gerekmez; yine de eklenir - riske girmemek icin).
+  5) Hic kanal yoksa DOSYA YAZILMAZ ve cikis 1 olur (eski liste korunur).
 """
 
 import re
@@ -23,6 +25,10 @@ warnings.filterwarnings("ignore")
 HOME_URL = "https://kralbozguncu.xyz/"
 OUTPUT_FILENAME = "kral.m3u"
 GROUP = "KralBozguncu"
+
+# Segmentler su an referersiz de calisiyor; yine de referer eklenir
+# (kaynak gerekli hale gelirse oynaticida kirilmasin).
+STREAM_REFERER = HOME_URL
 
 # Site event.html icinde sirayla denedigi base url'ler (calisan ilk base kullanilir).
 BASE_URLS = [
@@ -238,7 +244,10 @@ def main():
             title, path = futures[fut]
             url = fut.result()
             if url:
-                entries.append(f'#EXTINF:-1 group-title="{GROUP}", {title}\n{url}')
+                entries.append(
+                    f'#EXTINF:-1 group-title="{GROUP}", {title}\n'
+                    f"#EXTVLCOPT:http-referrer={STREAM_REFERER}\n{url}"
+                )
                 ok += 1
                 print(f"  ✅ {title}")
             else:
