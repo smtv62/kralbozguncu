@@ -31,11 +31,12 @@ GROUP = "KralBozguncu"
 STREAM_REFERER = HOME_URL
 
 # Site event.html icinde sirayla denedigi base url'ler (calisan ilk base kullanilir).
+# 2026-11: eski 211/215/217/219 kapandi; site 235/237/239/241'e gecti.
 BASE_URLS = [
-    "https://andro.evrenesoglu219.click/checklist/",
-    "https://andro.evrenesoglu211.click/checklist/",
-    "https://andro.evrenesoglu215.click/checklist/",
-    "https://andro.evrenesoglu217.click/checklist/",
+    "https://andro.evrenesoglu235.click/checklist/",
+    "https://andro.evrenesoglu237.click/checklist/",
+    "https://andro.evrenesoglu239.click/checklist/",
+    "https://andro.evrenesoglu241.click/checklist/",
 ]
 
 HEADERS = {
